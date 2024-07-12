@@ -27,6 +27,8 @@ up: ## Start the docker hub in detached mode (no logs)
 
 init: build start ## Build and start the containers
 
+restart: down up ## Restart the docker hub
+
 down: ## Stop the docker hub
 	@$(DOCKER_COMP) down --remove-orphans
 
@@ -42,7 +44,7 @@ prune-all: ## Prune all docker resources
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req PHP_BIN/orm-pack'
 	@$(eval c ?=)
-	@$(COMPOSER) $(c)
+	$(COMPOSER) $(c)
 
 ## —— Project 🐝 ———————————————————————————————————————————————————————————————
 start: up require load-db load-fixtures  ## Start docker, load migrations and load fixtures

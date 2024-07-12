@@ -1,23 +1,23 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-apache
 
-# Installer les dépendances système et PHP nécessaires
-RUN apk add --no-cache \
-    bash \
+# Installation des dépendances
+RUN apt-get update && apt-get install -y \
     git \
-    zip \
     unzip \
     libzip-dev \
-    postgresql-dev \
-    && docker-php-ext-install zip pdo pdo_pgsql
+    && docker-php-ext-install zip
 
-# Installer Composer globalement
+# Enable Apache modules
+RUN a2enmod rewrite
+
+# Installation de Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Définir le répertoire de travail dans le conteneur
+# Installation des dépendances du projet (si nécessaire)
 WORKDIR /var/www/html
+COPY . /var/www/html
 
-# Copier le fichier composer.json et composer.lock (si existant)
-COPY composer.json composer.lock* ./
+RUN if [ -f composer.json ] && [ -f composer.lock ]; then composer install --optimize-autoloader; fi
 
-# Installer les dépendances PHP avec Composer uniquement si composer.json existe
-RUN if [ -f composer.json ]; then composer install --prefer-dist --no-interaction; fi
+# Commande par défaut
+CMD ["apache2-foreground"]
