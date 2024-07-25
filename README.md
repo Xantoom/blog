@@ -6,15 +6,20 @@
 
 ## Prérequis ##
 
-
+- Docker Compose
 
 ## Installation ##
 
 - Cloner le projet
+- Se placer dans le répertoire du projet
+- Faire la commande : ```make init```
   
 ## Utilisation ##
 
 - Se placer dans le dossier du projet
+- Faire la commande : ```make up```
+
+Pour stopper le projet, faire la commande : ```make down```
 
 ## Auteur ##
 * **Xavier Lauer** - [Xantoom](https://github.com/Xantoom)
