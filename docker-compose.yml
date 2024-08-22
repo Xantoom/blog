@@ -8,21 +8,20 @@ services:
       - .:/var/www/html  # Monter le code source dans le conteneur
     ports:
       - 80:80   # Expose le port 80 du conteneur (à droite) sur le port 80 de votre machine (à gauche)
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-password}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-16}
     depends_on:
       - database  # PHP dépend de la base de données
 
   # Conteneur PostgreSQL
   database:
-    image: postgres:16.3-alpine  # Image PostgreSQL légère
+    image: postgres:${POSTGRES_VERSION}-alpine  # Image PostgreSQL légère
     volumes:
       - db_data:/var/lib/postgresql/data:rw  # Persistance des données
+    ports:
+      - 5432:5432  # Expose le port 5432 du conteneur (à droite) sur le port 5432 de votre machine (à gauche)
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-        # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 
 # Volumes nommés
