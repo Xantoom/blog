@@ -23,7 +23,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-
 # Volumes nommés
 volumes:
   db_data:

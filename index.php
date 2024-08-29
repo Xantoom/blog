@@ -1,22 +1,37 @@
 <?php
-
 require_once './vendor/autoload.php';
 
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use App\Controller\HomeController;
 
-$route = $_SERVER['REQUEST_URI'];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-$loader = new FilesystemLoader('src/templates');
-$twig = new Environment($loader);
+$routes = [
+    '/' => [HomeController::class, 'index'],
+    '/login' => [SecurityController::class, 'login'],
+    '/logout' => [SecurityController::class, 'logout'],
+    '/account' => [AccountController::class, 'index'],
+    '/posts' => [PostController::class, 'index'],
+    '/posts/(\d+)' => [PostController::class, 'show'],
+    '/admin' => [AdminController::class, 'index'],
+    '/admin/posts' => [AdminPostController::class, 'index'],
+    '/admin/posts/create' => [AdminPostController::class, 'create'],
+    '/admin/posts/(\d+)/edit' => [AdminPostController::class, 'edit'],
+    '/admin/posts/(\d+)/delete' => [AdminPostController::class, 'delete'],
+];
 
-$className = match ($route) {
-    '/' => 'Home',
-    '/post/{id}' => 'Post',
-    '/admin' => 'Admin',
-    default => 'NotFound',
-};
+// Parcourir les routes pour trouver une correspondance
+foreach ($routes as $pattern => $callback) {
+    if (preg_match("#^$pattern$#", $uri, $matches)) {
+        // Supprime le premier élément (correspondance complète)
+        array_shift($matches);
 
-$controllerString = "App\controllers\\".$className.'Controller';
-$controller = new $controllerString($twig);
+        // Appeler le contrôleur et la méthode avec les paramètres capturés
+        $controller = new $callback[0]();
+        echo call_user_func_array([$controller, $callback[1]], $matches);
+        exit(); // Important pour arrêter l'exécution après avoir trouvé une route
+    }
+}
+
+// Aucune route trouvée
+$controller = new HttpNotFoundController();
 echo $controller->index();
