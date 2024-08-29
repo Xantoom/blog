@@ -4,7 +4,8 @@
     "monolog/monolog": "^3.7",
     "twig/twig": "^3.10",
     "php-kit/ext-pdo": "^1.1",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "doctrine/orm": "^3.2"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
