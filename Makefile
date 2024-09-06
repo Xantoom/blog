@@ -7,7 +7,6 @@ PHP_CONT = $(DOCKER_COMP) exec php
 
 # Executables
 PHP          = $(PHP_CONT) php
-PHP_BIN      = $(PHP_CONT) bin/console
 COMPOSER     = $(PHP_CONT) composer
 
 # Misc
@@ -35,9 +34,6 @@ down: ## Stop the docker hub
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
 
-sh: ## Connect to the PHP FPM container
-	@$(PHP_CONT) sh
-
 prune-all: ## Prune all docker resources
 	@$(DOCKER) system prune --all --force --volumes
 
@@ -47,13 +43,11 @@ composer: ## Run composer, pass the parameter "c=" to run a given command, examp
 	$(COMPOSER) $(c)
 
 ## —— Project 🐝 ———————————————————————————————————————————————————————————————
-start: up require load-db load-fixtures  ## Start docker, load migrations and load fixtures
+start: up require load-db  ## Start docker, load migrations and load fixtures
 
-reload: load-db load-fixtures ## Load migrations and load fixtures
+reload: load-db ## Load migrations and load fixtures
 
 reset-db: drop-db reload ## Drop the database, load migrations and load fixtures
-
-stop: down ## Stop docker
 
 require: vendor ## Install requirements (composer)
 
@@ -66,9 +60,6 @@ load-fixtures: ## Build the DB, control the schema validity, load fixtures and c
 
 migration: ## Generate a new migration
 	@$(PHP_BIN) make:migration
-
-migration-diff: ## Generate a new migration
-	@$(PHP_BIN) doctrine:migrations:diff
 
 migrate: ## Run migrations
 	@$(PHP_BIN) doctrine:migrations:migrate --no-interaction

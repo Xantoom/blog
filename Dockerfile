@@ -13,6 +13,9 @@ RUN a2enmod rewrite
 # Installation de Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV PATH="${PATH}:/root/.composer/vendor/bin"
+
 # Installation des dépendances du projet (si nécessaire)
 WORKDIR /var/www/html
 COPY . /var/www/html
