@@ -1,0 +1,32 @@
+<nav class="bg-primary text-white d-flex justify-content-between align-content-center flex-wrap">
+    <a class="navbar-brand ms-3 d-flex align-content-center flex-wrap" href="/">Blog de Xavier</a>
+    <ul class="navbar-nav d-flex flex-row gap-3 me-3">
+        <li class="nav-item active">
+            <a class="nav-link" href="/">Accueil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/posts">Articles</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+        </li>
+        {% if isLogged %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/profil">Profil</a>
+                    <a class="dropdown-item" href="">Déconnexion</a>
+                </div>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link btn btn-primary" href="">Se connecter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link btn btn-outline-primary" href="">S'inscrire</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
