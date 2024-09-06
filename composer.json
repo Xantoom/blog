@@ -5,7 +5,8 @@
     "twig/twig": "^3.10",
     "php-kit/ext-pdo": "^1.1",
     "ext-pdo": "*",
-    "doctrine/orm": "^3.2"
+    "doctrine/orm": "^3.2",
+    "doctrine/migrations": "^3.8"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
