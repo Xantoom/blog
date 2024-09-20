@@ -18,7 +18,7 @@ ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 # Installation des dépendances du projet (si nécessaire)
 WORKDIR /var/www/html
-COPY . /var/www/html
+COPY . .
 
 RUN if [ -f composer.json ] && [ -f composer.lock ]; then composer install --optimize-autoloader; fi
 
