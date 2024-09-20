@@ -7,6 +7,8 @@ PHP_CONT = $(DOCKER_COMP) exec php
 
 # Executables
 PHP          = $(PHP_CONT) php
+PHP_BIN      = $(PHP_CONT) bin/console
+DOCTRINE	 = $(PHP_CONT) php ./vendor/bin/doctrine-migrations
 COMPOSER     = $(PHP_CONT) composer
 
 # Misc
@@ -24,12 +26,12 @@ build: ## Builds the Docker images
 up: ## Start the docker hub in detached mode (no logs)
 	@$(DOCKER_COMP) up --detach
 
-init: build start ## Build and start the containers
-
-restart: down up ## Restart the docker hub
+start: build up ## Build and start the docker hub
 
 down: ## Stop the docker hub
 	@$(DOCKER_COMP) down --remove-orphans
+
+restart: down up ## Restart the docker hub
 
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
@@ -43,30 +45,5 @@ composer: ## Run composer, pass the parameter "c=" to run a given command, examp
 	$(COMPOSER) $(c)
 
 ## —— Project 🐝 ———————————————————————————————————————————————————————————————
-start: up require load-db  ## Start docker, load migrations and load fixtures
-
-reload: load-db ## Load migrations and load fixtures
-
-reset-db: drop-db reload ## Drop the database, load migrations and load fixtures
-
-require: vendor ## Install requirements (composer)
-
-load-db:
-	@$(PHP_BIN) doctrine:database:create --if-not-exists
-	@$(PHP_BIN) doctrine:migrations:migrate -n
-
-load-fixtures: ## Build the DB, control the schema validity, load fixtures and check the migration status
-	@$(PHP_BIN) doctrine:fixtures:load --no-interaction
-
-migration: ## Generate a new migration
-	@$(PHP_BIN) make:migration
-
-migrate: ## Run migrations
-	@$(PHP_BIN) doctrine:migrations:migrate --no-interaction
-
-drop-db: ## Reset the database
-	@$(PHP_BIN) doctrine:database:drop --force
-
-vendor: ## Install vendors
-vendor: c=install
-vendor: composer
+doctrine: ## Run doctrine commands, pass the parameter "c=" to run a given command, example: make doctrine c='migrate'
+	@$(DOCTRINE) $(c)
