@@ -1,7 +1,6 @@
 <?php
 require_once './vendor/autoload.php';
 
-use App\Controller\ContactController;
 use App\Controller\Exceptions\NotFoundController;
 use App\Controller\HomeController;
 
@@ -10,7 +9,6 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $routes = [
     '/' => [HomeController::class, 'index'],
     '/home' => [HomeController::class, 'index'],
-    '/contact' => [ContactController::class, 'index'],
     '/login' => [SecurityController::class, 'login'],
     '/logout' => [SecurityController::class, 'logout'],
     '/account' => [AccountController::class, 'index'],
