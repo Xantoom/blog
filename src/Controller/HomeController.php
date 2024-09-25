@@ -6,6 +6,6 @@ class HomeController extends AbstractController
 {
     public function index(): string
     {
-        return $this->render('index.html.twig', ['name' => 'Xavier']);
+        return $this->render('pages/home/index.html.twig', ['name' => 'Xavier']);
     }
 }
