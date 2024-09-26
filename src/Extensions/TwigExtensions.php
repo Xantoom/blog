@@ -50,9 +50,7 @@ class TwigExtensions extends AbstractExtension {
         foreach ($args as $arg) {
             echo '<div class="bg-dark text-white p-3 my-2 rounded">';
             echo '<pre class="mb-0">';
-
             var_dump($arg);
-
             echo '</pre>';
             echo '</div>';
         }
