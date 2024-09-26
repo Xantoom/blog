@@ -19,6 +19,15 @@ services:
       - 80:80   # Expose le port 80 du conteneur (à droite) sur le port 80 de votre machine (à gauche)
     depends_on:
       - database  # PHP dépend de la base de données
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_VERSION: ${POSTGRES_VERSION}
+      MAILERSEND_API_KEY: ${MAILERSEND_API_KEY}
+      MAILERSEND_MAIL_ADDRESS: ${MAILERSEND_MAIL_ADDRESS}
 
   # Conteneur PostgreSQL
   database:
