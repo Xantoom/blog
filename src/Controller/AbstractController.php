@@ -43,6 +43,19 @@ abstract class AbstractController
         return $this->isLogged() && $_SESSION['user']['role'] === $role->name;
     }
 
+    protected function addFlash(string $type, string $message): void
+    {
+        // if there is already a flash message of this type, create a new array
+        if (isset($_SESSION['flashes'][$type])) {
+            $_SESSION['flashes'][$type] = (array)$_SESSION['flashes'][$type];
+            $_SESSION['flashes'][$type][] = $message;
+            return;
+        }
+
+        // if there is no flash message of this type, create a new array
+        $_SESSION['flashes'][$type] = [$message];
+    }
+
     protected function getCurrentUser(): ?User
     {
         if (!$this->isLogged()) {
@@ -57,5 +70,4 @@ abstract class AbstractController
         // For now, return a new user
         return new User();
     }
-
 }

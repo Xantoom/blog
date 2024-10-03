@@ -1,0 +1,15 @@
+{% extends 'layout/_base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <!-- Header-->
+    {% include('pages/home/includes/_header.html.twig') %}
+
+    <!-- Contact Form -->
+    {% include('pages/home/includes/_contact_form.html.twig') %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ assets('js/pages/home/contact-form.js') }}" defer></script>
+{% endblock %}
