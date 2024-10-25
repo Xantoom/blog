@@ -6,14 +6,14 @@ DOCKER_COMP = docker compose
 PHP_CONT = $(DOCKER_COMP) exec php
 
 # Executables
-PHP          = $(PHP_CONT) php
-PHP_BIN      = $(PHP_CONT) bin/console
-DOCTRINE	 = $(PHP_CONT) php ./vendor/bin/doctrine-migrations
-COMPOSER     = $(PHP_CONT) composer
+PHP          			= $(PHP_CONT) php
+DOCTRINE     			= $(PHP_CONT) php ./bin/doctrine.php
+DOCTRINE-MIGRATIONS	 	= $(PHP_CONT) php ./vendor/bin/doctrine-migrations
+COMPOSER     			= $(PHP_CONT) composer
 
 # Misc
 .DEFAULT_GOAL = help
-.PHONY        = help build up start down logs sh composer vendor sf cc
+.PHONY        = help build up start down restart logs composer vendor doctrine doctrine-migrations create-migration migrate load-fixtures drop-db load-db reset-db reset-db-without-fixtures php
 
 ## —— 🎵 🐳 The PHP_BIN-docker Makefile 🐳 🎵 ——————————————————————————————————
 help: ## Outputs this help screen
@@ -26,7 +26,7 @@ build: ## Builds the Docker images
 up: ## Start the docker hub in detached mode (no logs)
 	@$(DOCKER_COMP) up --detach
 
-start: build up ## Build and start the docker hub
+start: build up vendor load-db load-fixtures ## Build and start the docker hub
 
 down: ## Stop the docker hub
 	@$(DOCKER_COMP) down --remove-orphans
@@ -36,14 +36,41 @@ restart: down up ## Restart the docker hub
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
 
-prune-all: ## Prune all docker resources
-	@$(DOCKER) system prune --all --force --volumes
-
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req PHP_BIN/orm-pack'
 	@$(eval c ?=)
 	$(COMPOSER) $(c)
 
+vendor: ## Install composer dependencies
+	@$(COMPOSER) install
+
 ## —— Project 🐝 ———————————————————————————————————————————————————————————————
 doctrine: ## Run doctrine commands, pass the parameter "c=" to run a given command, example: make doctrine c='migrate'
 	@$(DOCTRINE) $(c)
+
+doctrine-migrations: ## Run doctrine-migrations commands, pass the parameter "c=" to run a given command, example: make doctrine-migrations c='diff'
+	@$(DOCTRINE-MIGRATIONS) $(c)
+
+create-migration: ## Create a new migration
+	@$(DOCTRINE-MIGRATIONS) diff
+
+migrate: ## Migrate the database
+	@$(DOCTRINE-MIGRATIONS) migrate --no-interaction
+
+load-fixtures: ## Load fixtures
+	@$(PHP) load-fixtures.php
+
+drop-db: ## Drop the database
+	@$(DOCTRINE) orm:schema-tool:drop --force
+
+load-db: ## Load the database
+	@$(DOCTRINE) orm:schema-tool:create
+	@$(DOCTRINE-MIGRATIONS) migrate --no-interaction
+
+reset-db: drop-db load-db load-fixtures ## Reset the database
+
+reset-db-without-fixtures: drop-db load-db ## Reset the database
+
+## —— PHP 🐘 ————————————————————————————————————————————————————————————————
+php: ## Run PHP commands, pass the parameter "c=" to run a given command, example: make php c='bin/console'
+	@$(PHP) $(c)

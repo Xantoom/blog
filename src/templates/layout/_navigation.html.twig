@@ -13,14 +13,22 @@
                     <a class="nav-link" href="{{ path('home') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_home') }}">Blog Posts</a>
+                    <a class="nav-link" href="{{ path('posts') }}">Blog Posts</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_home') }}">Connection</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('contact') }}">Contact</a>
-                </li>
+                {% if not is_granted('ROLE_USER') %}
+                    <li class="nav-item">
+                        <a class="btn btn-primary" style="font-weight: bold;" href="{{ path('login') }}">Sign In</a>
+                    </li>
+                {% else %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin_dashboard') }}">Dashboard</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="btn btn-primary" style="font-weight: bold;" href="{{ path('logout') }}">Sign Out</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

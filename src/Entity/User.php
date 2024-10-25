@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Entity()]
 #[ORM\Table(name: 'users')]
 class User
 {
@@ -17,16 +17,16 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 64, nullable: false)]
+    #[ORM\Column(length: 127, nullable: false)]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 64, nullable: false)]
+    #[ORM\Column(length: 127, nullable: false)]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 64, unique: true, nullable: false)]
+    #[ORM\Column(length: 127, unique: true, nullable: false)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 48, nullable: false)]
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $password = null;
 
     #[ORM\Column(type: 'json', nullable: false)]
@@ -36,7 +36,7 @@ class User
     private ?bool $active = true;
 
     #[ORM\Column(nullable: false)]
-    private ?string $profilePicture = 'default.jpg';
+    private ?string $profilePicture = 'https://cdn-icons-png.flaticon.com/512/3541/3541871.png';
 
     #[ORM\Column(type: 'datetime_immutable', nullable: false)]
     private ?\DateTimeImmutable $createdAt;
@@ -62,6 +62,9 @@ class User
     #[ORM\OneToMany(targetEntity: CommentEdit::class, mappedBy: 'editedBy')]
     private Collection $commentsEdited;
 
+    #[ORM\OneToMany(targetEntity: AuthToken::class, mappedBy: 'user')]
+    private Collection $authTokens;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -74,6 +77,8 @@ class User
         $this->commentApprovals = new ArrayCollection();
         $this->commentsDeleted = new ArrayCollection();
         $this->commentsEdited = new ArrayCollection();
+
+        $this->authTokens = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -287,6 +292,33 @@ class User
         if (!$this->commentsEdited->contains($commentEdit)) {
             $this->commentsEdited[] = $commentEdit;
             $commentEdit->setEditedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function getAuthTokens(): Collection
+    {
+        return $this->authTokens;
+    }
+
+    public function addAuthToken(AuthToken $authToken): self
+    {
+        if (!$this->authTokens->contains($authToken)) {
+            $this->authTokens[] = $authToken;
+            $authToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthToken(AuthToken $authToken): self
+    {
+        if ($this->authTokens->removeElement($authToken)) {
+            // set the owning side to null (unless already changed)
+            if ($authToken->getUser() === $this) {
+                $authToken->setUser(null);
+            }
         }
 
         return $this;

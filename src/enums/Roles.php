@@ -2,11 +2,11 @@
 
 namespace App\enums;
 
-enum Roles
+enum Roles: string
 {
-    case ROLE_USER;
-    case ROLE_EDITOR;
-    case ROLE_ADMIN;
+    case ROLE_USER = 'ROLE_USER';
+    case ROLE_EDITOR = 'ROLE_EDITOR';
+    case ROLE_ADMIN = 'ROLE_ADMIN';
 
     public function getFrenchName(): string
     {

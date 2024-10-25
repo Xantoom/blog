@@ -6,6 +6,15 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html  # Monter le code source dans le conteneur
+    environment:
+        # COPY ALL ENV VARIABLES
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_HOST: ${POSTGRES_HOST}
+        POSTGRES_PORT: ${POSTGRES_PORT}
+        MAILERSEND_API_KEY: ${MAILERSEND_API_KEY}
+        MAILERSEND_MAIL_ADRESS: ${MAILERSEND_MAIL_ADRESS}
     ports:
       - 80:80   # Expose le port 80 du conteneur (à droite) sur le port 80 de votre machine (à gauche)
     depends_on:
@@ -13,15 +22,17 @@ services:
 
   # Conteneur PostgreSQL
   database:
+    restart: always
     image: postgres:${POSTGRES_VERSION}-alpine  # Image PostgreSQL légère
     volumes:
       - db_data:/var/lib/postgresql/data:rw  # Persistance des données
     ports:
-      - 5432:5432  # Expose le port 5432 du conteneur (à droite) sur le port 5432 de votre machine (à gauche)
+      - "5432:5432"  # Expose le port 5432 du conteneur (à droite) sur le port 5432 de votre machine (à gauche)
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
 
 # Volumes nommés
 volumes:

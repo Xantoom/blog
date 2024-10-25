@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
 $dbParams = [
-    'driver'   => 'pdo_pgsql',
+    'driver'   => 'pgsql',
     'user'     => $_ENV['POSTGRES_USER'],
     'password' => $_ENV['POSTGRES_PASSWORD'],
     'dbname'   => $_ENV['POSTGRES_DB'],

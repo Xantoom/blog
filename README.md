@@ -2,7 +2,7 @@
 
 > Blog est un projet de formation de la formation Développeur PHP Symfony d'OpenClassrooms. Il s'agit d'un blog personel.
 
-Étape du projet : 5%
+Étape du projet : 70%
 
 ## Prérequis ##
 
@@ -12,7 +12,7 @@
 
 - Cloner le projet
 - Se placer dans le répertoire du projet
-- Faire la commande : ```make init```
+- Faire la commande : ```make start```
   
 ## Utilisation ##
 
