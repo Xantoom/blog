@@ -1,4 +1,4 @@
-<section class="py-5" id="contact-form">
+<section class="py-5">
     <div class="container px-5">
         <!-- Contact form-->
         <div class="bg-light rounded-4 py-5 px-4 px-md-5">
@@ -9,7 +9,7 @@
             </div>
             <div class="row gx-5 justify-content-center">
                 <div class="col-lg-8 col-xl-6">
-                    <form id="contactForm" method="POST" action="/home#contact-form">
+                    <form id="contactForm" method="POST" action="{{ path('home') }}">
                         <!-- Name input-->
                         <div class="form-floating mb-3">
                             <input class="form-control {% if form_errors['name'] is defined %}is-invalid{% endif %}" id="name" type="text" name="name" placeholder="Enter your name...">

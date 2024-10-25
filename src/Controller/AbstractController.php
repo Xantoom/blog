@@ -5,22 +5,12 @@ namespace App\Controller;
 use App\Entity\User;
 use App\enums\Roles;
 use App\Extensions\TwigExtensions;
-use App\Repository\AuthTokenRepository;
-use App\Security\Middleware;
-use App\Service\RepositoryService;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\Migrations\Configuration\Migration\PhpFile;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\ORMSetup;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 abstract class AbstractController
 {
-    private Environment $twig;
-    private ?User $currentUser;
-    private readonly RepositoryService $repositoryService;
+    protected Environment $twig;
 
     public function __construct()
     {
@@ -31,40 +21,6 @@ abstract class AbstractController
         $twig->addExtension(new TwigExtensions());
 
         $this->twig = $twig;
-
-        $this->repositoryService = new RepositoryService();
-
-        $middleware = new Middleware($this->repositoryService->getAuthTokenRepository());
-        $this->currentUser = $middleware->getCurrentUser();
-    }
-
-    protected function getRepositoryService(): RepositoryService
-    {
-        return $this->repositoryService;
-    }
-
-    protected function getEntityManager(): EntityManager
-    {
-        return $this->repositoryService->getEntityManager();
-    }
-
-    protected function getCurrentUser(): ?User
-    {
-        return $this->currentUser;
-    }
-
-    protected function isLogged(): bool
-    {
-        return $this->currentUser instanceof User;
-    }
-
-    protected function isGranted(string $role): bool
-    {
-        if (!$this->isLogged()) {
-            return false;
-        }
-
-        return in_array($role, $this->currentUser->getRoles(), true);
     }
 
     protected function render(string $template, array $data = []): string
@@ -72,22 +28,46 @@ abstract class AbstractController
         return $this->twig->render($template, $data);
     }
 
-    protected function redirect(string $controller): void
+    protected function redirect(string $url): void
     {
-        header("Location: $controller".PHP_EOL);
-        exit();
+        header("Location: $url");
+    }
+
+    protected function isLogged(): bool
+    {
+        return isset($_SESSION['user']);
+    }
+
+    protected function isGranted(Roles $role): bool
+    {
+        return $this->isLogged() && $_SESSION['user']['role'] === $role->name;
     }
 
     protected function addFlash(string $type, string $message): void
     {
         // if there is already a flash message of this type, create a new array
         if (isset($_SESSION['flashes'][$type])) {
-            $_SESSION['flashes'][$type] = (array) $_SESSION['flashes'][$type];
+            $_SESSION['flashes'][$type] = (array)$_SESSION['flashes'][$type];
             $_SESSION['flashes'][$type][] = $message;
             return;
         }
 
         // if there is no flash message of this type, create a new array
         $_SESSION['flashes'][$type] = [$message];
+    }
+
+    protected function getCurrentUser(): ?User
+    {
+        if (!$this->isLogged()) {
+            return null;
+        }
+
+        $id = $_SESSION['user']['id'];
+
+        // Get user from database
+
+
+        // For now, return a new user
+        return new User();
     }
 }
