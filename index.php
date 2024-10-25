@@ -5,6 +5,7 @@ require_once './config.php';
 
 use App\Controller\Exceptions\NotFoundController;
 use App\Controller\HomeController;
+use App\Controller\PostController;
 use App\Controller\SecurityController;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
