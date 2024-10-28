@@ -47,9 +47,11 @@ class CommentEdit
         return $this->content;
     }
 
-    public function setContent(string $content): void
+    public function setContent(string $content): self
     {
         $this->content = $content;
+
+		return $this;
     }
 
     public function getEditedAt(): \DateTimeImmutable
@@ -57,14 +59,23 @@ class CommentEdit
         return $this->editedAt;
     }
 
+	public function setEditedAt(\DateTimeImmutable $editedAt): self
+	{
+		$this->editedAt = $editedAt;
+
+		return $this;
+	}
+
     public function getEditedBy(): User
     {
         return $this->editedBy;
     }
 
-    public function setEditedBy(User $editedBy): void
+    public function setEditedBy(User $editedBy): self
     {
         $this->editedBy = $editedBy;
+
+		return $this;
     }
 
     public function getComment(): Comment
@@ -72,9 +83,11 @@ class CommentEdit
         return $this->comment;
     }
 
-    public function setComment(Comment $comment): void
+    public function setComment(Comment $comment): self
     {
         $this->comment = $comment;
+
+		return $this;
     }
 
 }

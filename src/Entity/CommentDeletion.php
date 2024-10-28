@@ -44,9 +44,11 @@ class CommentDeletion
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(\DateTimeImmutable $deletedAt): void
+    public function setDeletedAt(\DateTimeImmutable $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+		return $this;
     }
 
     public function getDeletedBy(): User
@@ -54,9 +56,11 @@ class CommentDeletion
         return $this->deletedBy;
     }
 
-    public function setDeletedBy(User $deletedBy): void
+    public function setDeletedBy(User $deletedBy): self
     {
         $this->deletedBy = $deletedBy;
+
+		return $this;
     }
 
     public function getComment(): Comment
@@ -64,9 +68,11 @@ class CommentDeletion
         return $this->comment;
     }
 
-    public function setComment(Comment $comment): void
+    public function setComment(Comment $comment): self
     {
         $this->comment = $comment;
+
+		return $this;
     }
 
 }

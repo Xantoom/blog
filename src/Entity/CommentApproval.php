@@ -47,9 +47,11 @@ class CommentApproval
         return $this->approvedAt;
     }
 
-    public function setApprovedAt(\DateTimeImmutable $approvedAt): void
+    public function setApprovedAt(\DateTimeImmutable $approvedAt): self
     {
         $this->approvedAt = $approvedAt;
+
+		return $this;
     }
 
     public function isApproved(): bool
@@ -57,9 +59,11 @@ class CommentApproval
         return $this->approved;
     }
 
-    public function setApproved(bool $approved): void
+    public function setApproved(bool $approved): self
     {
         $this->approved = $approved;
+
+		return $this;
     }
 
     public function getApprovedBy(): User
@@ -67,9 +71,11 @@ class CommentApproval
         return $this->approvedBy;
     }
 
-    public function setApprovedBy(User $approvedBy): void
+    public function setApprovedBy(User $approvedBy): self
     {
         $this->approvedBy = $approvedBy;
+
+		return $this;
     }
 
     public function getComment(): Comment
@@ -77,9 +83,11 @@ class CommentApproval
         return $this->comment;
     }
 
-    public function setComment(Comment $comment): void
+    public function setComment(Comment $comment): self
     {
         $this->comment = $comment;
+
+		return $this;
     }
 
 }
