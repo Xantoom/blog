@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentDeletionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CommentDeletionRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'comment_deletions')]
 class CommentDeletion
 {

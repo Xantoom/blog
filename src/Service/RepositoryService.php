@@ -20,7 +20,6 @@ use Doctrine\ORM\ORMSetup;
 class RepositoryService
 {
     private EntityManager $entityManager;
-    private $_entityManager = null;
 
     public function __construct()
     {
@@ -29,11 +28,6 @@ class RepositoryService
 
     public function getEntityManager(): EntityManager
     {
-        // if (!$this->_entityManager) {
-        //     $this->_entityManager = new EntityManager();
-        // }
-        //
-        // return $this->_entityManager;
         global $entityManager;
         return $entityManager;
     }

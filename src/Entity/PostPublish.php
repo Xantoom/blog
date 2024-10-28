@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\PostPublishRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PostPublishRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'post_publishes')]
 class PostPublish
 {

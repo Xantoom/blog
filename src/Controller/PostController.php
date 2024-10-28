@@ -6,11 +6,8 @@ class PostController extends AbstractController
 {
     public function index(): string
     {
-        $posts = $this->getRepositoryService()->getPostRepository()->findBy([], ['created_at' => 'DESC']);
-
         return $this->render('pages/posts/index.html.twig', [
-            'posts' => $posts,
-        ]);
+			'posts' => $this->getRepositoryService()->getPostRepository()->findBy([], ['createdAt' => 'DESC']),
+		]);
     }
-
 }

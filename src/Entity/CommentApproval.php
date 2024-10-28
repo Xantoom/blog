@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentApprovalRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CommentApprovalRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'comment_approvals')]
 class CommentApproval
 {

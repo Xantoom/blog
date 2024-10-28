@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentEditRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CommentEditRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'comment_edits')]
 class CommentEdit
 {

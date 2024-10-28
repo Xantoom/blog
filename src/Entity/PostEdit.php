@@ -2,10 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\PostEditRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PostEditRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'post_edits')]
 class PostEdit
 {

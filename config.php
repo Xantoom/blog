@@ -21,3 +21,4 @@ $config = ORMSetup::createAttributeMetadataConfiguration(
 $connection = DriverManager::getConnection($dbParams, $config);
 
 $entityManager = new EntityManager($connection, $config);
+global $entityManager;

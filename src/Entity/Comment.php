@@ -2,12 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'comments')]
 class Comment
 {

@@ -6,9 +6,8 @@ use App\enums\Roles;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 
-#[ORM\Entity()]
+#[ORM\Entity]
 #[ORM\Table(name: 'users')]
 class User
 {
