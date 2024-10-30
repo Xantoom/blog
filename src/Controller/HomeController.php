@@ -10,8 +10,6 @@ class HomeController extends AbstractController
 {
     public function index(): string
     {
-        dump($_SESSION);
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'] ?? null;
             $email = $_POST['email'] ?? null;
