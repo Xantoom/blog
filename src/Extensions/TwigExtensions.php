@@ -16,8 +16,20 @@ class TwigExtensions extends AbstractExtension {
             new TwigFunction('path', $this->getPath(...)),
             new TwigFunction('assets', $this->getAssets(...)),
             new TwigFunction('flashes', $this->getFlashes(...)),
+            new TwigFunction('currentUser', $this->getCurrentUser(...)),
+            new TwigFunction('dump', $this->getDump(...)),
         ];
     }
+
+	private function getDump($var): void {
+		dump($var);
+	}
+
+	private function getCurrentUser(): ?User
+	{
+		$repositoryService = new RepositoryService();
+		return (new Middleware($repositoryService->getAuthTokenRepository()))->getCurrentUser();
+	}
 
     private function getFlashes(): array {
         $flashes = [];
@@ -34,26 +46,22 @@ class TwigExtensions extends AbstractExtension {
         $middleware = new Middleware($repositoryService->getAuthTokenRepository());
 
         $currentUser = $middleware->getCurrentUser();
-        if (!($currentUser instanceof User)) {
+        if (null === $currentUser) {
             return false;
         }
 
-        return match ($role) {
-            'ROLE_USER' => in_array(Roles::ROLE_USER, $currentUser->getRoles(), true),
-            'ROLE_EDITOR' => in_array(Roles::ROLE_EDITOR, $currentUser->getRoles(), true),
-            'ROLE_ADMIN' => in_array(Roles::ROLE_ADMIN, $currentUser->getRoles(), true),
-            default => false,
-        };
+        return in_array($role, $currentUser->getRoles(), true);
     }
 
-    private function getPath(string $route, array $params = []): string
-    {
-        $url = $route;
-        if (!empty($params)) {
-            $url .= '?' . http_build_query($params);
-        }
-        return $url;
-    }
+	private function getPath(string $route, ?array $params = []): string
+	{
+		$url = $route;
+		if (!empty($params)) {
+			$url .= '?' . http_build_query($params);
+		}
+
+		return $url;
+	}
 
     private function getAssets(string $path): string
     {

@@ -13,14 +13,20 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $routes = [
     '/' => [HomeController::class, 'index'],
     '/home' => [HomeController::class, 'index'],
+	'/not-found' => [NotFoundController::class, 'index'],
 
     '/register' => [SecurityController::class, 'register'],
     '/login' => [SecurityController::class, 'login'],
     '/logout' => [SecurityController::class, 'logout'],
 
-    '/account' => [AccountController::class, 'index'],
     '/posts' => [PostController::class, 'index'],
     '/posts/(\d+)' => [PostController::class, 'show'],
+	'/comment/(\d+)/approve' => [PostController::class, 'approveComment'],
+	'/comment/(\d+)/disapprove' => [PostController::class, 'disapproveComment'],
+	'/comment/(\d+)/delete' => [PostController::class, 'deleteComment'],
+	'/comment/(\d+)/edit' => [PostController::class, 'editComment'],
+
+	'/account' => [AccountController::class, 'index'],
 
     '/admin' => [AdminController::class, 'index'],
     '/admin/posts' => [AdminPostController::class, 'index'],
@@ -45,5 +51,5 @@ foreach ($routes as $pattern => $callback) {
 }
 
 // Aucune route trouvée
-$controller = new NotFoundController();
-echo $controller->index();
+header('Location: /not-found'.PHP_EOL);
+exit();

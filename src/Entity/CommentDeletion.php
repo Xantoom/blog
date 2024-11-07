@@ -20,7 +20,7 @@ class CommentDeletion
     #[ORM\JoinColumn(nullable: false)]
     private ?User $deletedBy = null;
 
-    #[ORM\ManyToOne(targetEntity: Comment::class)]
+    #[ORM\OneToOne(targetEntity: Comment::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Comment $comment = null;
 

@@ -85,7 +85,7 @@ class SecurityController extends AbstractController
             $_SESSION['auth_token'] = $authToken->getToken();
 
             $this->addFlash('success', 'You are now registered');
-            $this->redirect('home');
+            $this->redirect('/');
         }
 
         return $this->render('pages/security/register/register.html.twig');
@@ -144,7 +144,7 @@ class SecurityController extends AbstractController
 
             $this->addFlash('success', 'You are now connected');
 
-            $this->redirect('home');
+            $this->redirect('/');
         }
 
         return $this->render('pages/security/login/login.html.twig');

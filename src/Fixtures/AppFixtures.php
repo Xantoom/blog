@@ -118,7 +118,7 @@ class AppFixtures implements FixtureInterface
 
 		$this->manager->flush();
 
-		$nbPosts = 12;
+		$nbPosts = 32;
 		for ($i = 0; $i < $nbPosts; $i++) {
 			$post = new Post();
 			$post
@@ -134,8 +134,8 @@ class AppFixtures implements FixtureInterface
 			$this->manager->persist($post);
 			$this->posts[] = $post;
 
-			// 20% de chance d'avoir un post édité
-			if ($this->faker->boolean(20)) {
+			// 30% de chance d'avoir un post édité
+			if ($this->faker->boolean(30)) {
 				$postEdit = new PostEdit();
 				$postEdit
 					->setContent('EDITED: ' . $this->faker->paragraphs(5, true))
@@ -182,8 +182,8 @@ class AppFixtures implements FixtureInterface
 			$this->manager->persist($comment);
 			$this->comments[] = $comment;
 
-			// 75% de chance d'avoir un commentaire approuvé
-			if ($this->faker->boolean(75)) {
+			// 20% de chance d'avoir un commentaire approuvé
+			if ($this->faker->boolean(20)) {
 				$commentApproval = new CommentApproval();
 				$commentApproval
 					->setApproved(true)
@@ -194,6 +194,8 @@ class AppFixtures implements FixtureInterface
 				;
 				$this->manager->persist($commentApproval);
 				$this->commentApprovals[] = $commentApproval;
+
+				$comment->setApproval($commentApproval);
 			}
 
 			// 20% de chance d'avoir un commentaire supprimé
@@ -207,6 +209,8 @@ class AppFixtures implements FixtureInterface
 				;
 				$this->manager->persist($commentDeletion);
 				$this->commentDeletions[] = $commentDeletion;
+
+				$comment->setDeletion($commentDeletion);
 			}
 
 			// 20% de chance d'avoir un commentaire édité

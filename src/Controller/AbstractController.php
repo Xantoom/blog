@@ -13,6 +13,7 @@ use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\ORMSetup;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -21,9 +22,12 @@ abstract class AbstractController
     private Environment $twig;
     private ?User $currentUser;
     private readonly RepositoryService $repositoryService;
+	protected Request $request;
 
     public function __construct()
     {
+		$this->request = Request::createFromGlobals();
+
         $loader = new FilesystemLoader('src/templates');
 
         // New instance of Twig with custom extensions
@@ -72,9 +76,9 @@ abstract class AbstractController
         return $this->twig->render($template, $data);
     }
 
-    protected function redirect(string $controller): void
+    protected function redirect(string $route): void
     {
-        header("Location: $controller".PHP_EOL);
+        header("Location: $route".PHP_EOL);
         exit();
     }
 

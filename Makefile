@@ -26,7 +26,7 @@ build: ## Builds the Docker images
 up: ## Start the docker hub in detached mode (no logs)
 	@$(DOCKER_COMP) up --detach
 
-start: build up vendor load-db load-fixtures ## Build and start the docker hub
+start: build up vendor load-db ## Build and start the docker hub
 
 down: ## Stop the docker hub
 	@$(DOCKER_COMP) down --remove-orphans

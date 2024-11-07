@@ -42,12 +42,15 @@ class Post
     private ?PostCategory $category = null;
 
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
     private Collection $comments;
 
     #[ORM\OneToMany(targetEntity: PostEdit::class, mappedBy: 'post')]
+    #[ORM\OrderBy(['editedAt' => 'DESC'])]
     private Collection $edits;
 
     #[ORM\OneToMany(targetEntity: PostPublish::class, mappedBy: 'post')]
+    #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $publishes;
 
     public function __construct()

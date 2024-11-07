@@ -1,0 +1,43 @@
+{% extends 'layout/_base.html.twig' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-4 text-primary">Posts</h2>
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-lg">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('/posts', {page: page - 1}) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if page < nbPages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('/posts', {page: page + 1}) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-md-4 mb-3">
+                    {% include 'pages/posts/listing/_card.html.twig' with {
+                        image: post.banner,
+                        title: post.title,
+                        preview: post.preview,
+                        createdAt: post.createdAt|date('d/m/Y H:i'),
+                        category: post.category.name
+                    } %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
