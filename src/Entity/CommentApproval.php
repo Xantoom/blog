@@ -23,7 +23,7 @@ class CommentApproval
     #[ORM\JoinColumn(nullable: false)]
     private ?User $approvedBy = null;
 
-    #[ORM\ManyToOne(targetEntity: Comment::class)]
+    #[ORM\OneToOne(targetEntity: Comment::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Comment $comment = null;
 

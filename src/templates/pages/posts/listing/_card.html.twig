@@ -1,0 +1,14 @@
+<a class="card h-100 shadow-lg border-0 rounded-lg" style="text-decoration: none !important; cursor: pointer;"
+   href="{{ path('/posts/' ~ post.id) }}">
+    <div class="position-relative">
+        <img src="{{ image }}" class="card-img-top rounded-top-lg" alt="{{ title }}">
+        <span class="badge position-absolute top-0 end-0 m-2" style="background: linear-gradient(to right, blue, red);">{{ category }}</span>
+    </div>
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title mb-3 fw-bold">{{ title }}</h5>
+        <p class="card-text mb-4">{{ preview }}</p>
+        <div class="mt-auto">
+            <p class="card-text"><small class="text-muted">{{ createdAt }}</small></p>
+        </div>
+    </div>
+</a>

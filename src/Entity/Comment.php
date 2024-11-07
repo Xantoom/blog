@@ -29,21 +29,22 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Post $post = null;
 
-    #[ORM\OneToMany(targetEntity: CommentApproval::class, mappedBy: 'comment')]
-    private Collection $commentApprovals;
+    #[ORM\OneToOne(targetEntity: CommentApproval::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?CommentApproval $approval = null;
 
-    #[ORM\OneToMany(targetEntity: CommentDeletion::class, mappedBy: 'comment')]
-    private Collection $commentsDeleted;
+    #[ORM\OneToOne(targetEntity: CommentDeletion::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?CommentDeletion $deletion = null;
 
     #[ORM\OneToMany(targetEntity: CommentEdit::class, mappedBy: 'comment')]
+    #[ORM\OrderBy(['editedAt' => 'DESC'])]
     private Collection $commentEdits;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
 
-        $this->commentApprovals = new ArrayCollection();
-        $this->commentsDeleted = new ArrayCollection();
         $this->commentEdits = new ArrayCollection();
     }
 
@@ -105,35 +106,29 @@ class Comment
         return $this;
     }
 
-    public function getCommentApprovals(): Collection
-    {
-        return $this->commentApprovals;
-    }
+	public function getApproval(): ?CommentApproval
+	{
+		return $this->approval;
+	}
 
-    public function addCommentApproval(CommentApproval $commentApproval): self
-    {
-        if (!$this->commentApprovals->contains($commentApproval)) {
-            $this->commentApprovals[] = $commentApproval;
-            $commentApproval->setComment($this);
-        }
+	public function setApproval(?CommentApproval $approval): self
+	{
+		$this->approval = $approval;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getCommentsDeleted(): Collection
-    {
-        return $this->commentsDeleted;
-    }
+	public function getDeletion(): ?CommentDeletion
+	{
+		return $this->deletion;
+	}
 
-    public function addCommentsDeleted(CommentDeletion $commentsDeleted): self
-    {
-        if (!$this->commentsDeleted->contains($commentsDeleted)) {
-            $this->commentsDeleted[] = $commentsDeleted;
-            $commentsDeleted->setComment($this);
-        }
+	public function setDeletion(?CommentDeletion $deletion): self
+	{
+		$this->deletion = $deletion;
 
-        return $this;
-    }
+		return $this;
+	}
 
     public function getCommentEdits(): Collection
     {

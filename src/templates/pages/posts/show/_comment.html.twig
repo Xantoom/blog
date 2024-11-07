@@ -1,0 +1,74 @@
+<div class="comment mb-4">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title text-danger fw-bold d-flex justify-content-between align-content-center">
+                <span class="text-dark d-flex align-content-center">
+                    {{ comment.createdBy.fullname }}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <span class="ms-1">- #{{ comment.id }}</span>
+                    {% endif %}
+                    {# Edit button #}
+                    {% if currentUser() and comment.createdBy.id == currentUser().id %}
+                        <a href="{{ path('/comment/' ~ comment.id ~ '/edit') }}" class="ms-2 badge bg-primary
+                        text-decoration-none text-white">Edit</a>
+                    {% endif %}
+                </span>
+                {% if is_granted('ROLE_ADMIN') or (comment.createdBy.id == currentUser().id) %}
+                    <div>
+                        {% if comment.approval is null %}
+                            <a href="{{ path('/comment/' ~ comment.id ~ '/approve') }}" class="badge bg-success text-decoration-none text-white">Approve</a>
+                        {% endif %}
+                        {% if comment.approval is not null %}
+                            {% if comment.approval.approved == false %}
+                                <a href="{{ path('/comment/' ~ comment.id ~ '/approve') }}" class="badge bg-success text-decoration-none text-white">Approve</a>
+                            {% else %}
+                                <a href="{{ path('/comment/' ~ comment.id ~ '/disapprove') }}" class="badge bg-warning text-decoration-none text-black">Disapprove</a>
+                            {% endif %}
+                        {% endif %}
+                        {% if  comment.approval is not null and comment.deletion is null %}
+                            <a href="{{ path('/comment/' ~ comment.id ~ '/delete') }}" class="badge bg-danger text-decoration-none text-white">Delete</a>
+                        {% endif %}
+                        {% if comment.approval is not null and comment.deletion is not null %}
+                            <span class="badge bg-secondary text-decoration-none text-black">Deleted</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted d-flex align-content-center">
+                {{ comment.createdAt|date('d/m/Y H:i') }}
+                {% if comment.commentEdits|length > 0 %}
+                    <span class="ms-2 badge badge-pill bg-success">Edited</span>
+                {% endif %}
+            </h6>
+            <div class="card-text">
+                {% if editCommentId is not null and comment.id == editCommentId and comment.createdBy == currentUser() %}
+                    <form action="{{ path('/posts/' ~ post.id) }}" method="POST">
+                        <div class="form-group">
+                            <label for="edit_comment_content"></label>
+                            <textarea class="form-control" id="edit_comment_content" name="edit_comment_content" rows="3" required>{{ comment.content }}</textarea>
+                        </div>
+                        <input type="hidden" id="edit_comment_id" name="edit_comment_id" value="{{ comment.id }}">
+                        <button type="submit" class="mt-4 btn btn-primary bg-gradient-secondary">Submit</button>
+                    </form>
+                {% else %}
+
+
+                    {% set content = comment.commentEdits|length > 0 ? comment.commentEdits.first.content : comment.content %}
+                    {% set words = content|split(' ') %}
+                    {% set formattedContent = '' %}
+
+                    {% for word in words %}
+                        {% if word starts with '@' %}
+                            {% set formattedContent = formattedContent
+                                ~ '<span class="text-primary">' ~ word ~ '</span> ' %}
+                        {% else %}
+                            {% set formattedContent = formattedContent ~ word ~ ' ' %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {{ formattedContent|raw }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
