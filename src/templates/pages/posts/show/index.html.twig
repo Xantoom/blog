@@ -46,11 +46,11 @@
                 <h3 class="mt-4">Comments</h3>
                 <div class="comments">
                     {% for comment in post.comments %}
-                        {% if is_granted('ROLE_ADMIN') or comment.isApproved %}
+                        {% if is_granted('ROLE_ADMIN') or comment.approval.approved %}
                             {% include 'pages/posts/show/_comment.html.twig' with { 'comment': comment } %}
                         {% endif %}
 
-                        {% if loop.last and (not is_granted('ROLE_ADMIN') and not comment.isApproved) %}
+                        {% if loop.last and (not is_granted('ROLE_ADMIN') and not comment.approval.approved) %}
                             <p class="text-muted">No comments yet.</p>
                         {% endif %}
                     {% else %}
