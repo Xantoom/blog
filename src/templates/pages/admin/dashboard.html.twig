@@ -1,0 +1,48 @@
+{% extends 'layout/admin/_base_admin.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="row">
+        {% if posts is defined %}
+            <div class="col-md-3">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Posts</h5>
+                        <p class="card-text h2">{{ posts }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if users is defined %}
+            <div class="col-md-3">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Users Registered</h5>
+                        <p class="card-text h2">{{ users }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if comments is defined %}
+            <div class="col-md-3">
+                <div class="card bg-info text-white mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Comments</h5>
+                        <p class="card-text h2">{{ comments }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if authTokens is defined %}
+            <div class="col-md-3">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Users Online (estimation)</h5>
+                        <p class="card-text h2">{{ authTokens }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
