@@ -16,6 +16,8 @@ class DashboardController extends AdminController
 			'users' => count($userRepository->findAll()),
 			'comments' => count($commentRepository->findAll()),
 			'authTokens' => count($authTokenRepository->findAll()),
+			'last_posts' => $postRepository->findBy([], ['createdAt' => 'DESC'], 5),
+			'last_comments_to_approve' => $commentRepository->findBy(['approval' => null], ['createdAt' => 'DESC'], 5),
 		]);
 	}
 }

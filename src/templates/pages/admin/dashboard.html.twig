@@ -4,6 +4,9 @@
 
 {% block body %}
     <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Dashboard</h1>
+        </div>
         {% if posts is defined %}
             <div class="col-md-3">
                 <div class="card bg-primary text-white mb-4">
@@ -44,5 +47,50 @@
                 </div>
             </div>
         {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-bar-chart-fill"></i> New posts
+                </div>
+                <div class="card-body">
+                    {% for post in last_posts %}
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-journal-text"></i> New post:
+                            <a href="{{ path('/posts/' ~ post.id) }}" class="text-decoration-none">
+                                {{ post.title }}
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-journal-text"></i> No new posts
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-bell-fill"></i> Comments pending approval
+                </div>
+                <div class="card-body" style="overflow-y: auto; max-height: 10%">
+                    {% for comment in last_comments_to_approve %}
+                        <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-chat-left-text"></i> New comment to approve:
+                            <a href="{{ path('/posts/' ~ comment.post.id) }}#comment-section"
+                               class="text-decoration-none">
+                                {{ comment.content }}
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-chat-left-text"></i> No new comments to approve
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
