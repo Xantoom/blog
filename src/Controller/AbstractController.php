@@ -38,7 +38,7 @@ abstract class AbstractController
 
         $this->repositoryService = new RepositoryService();
 
-        $middleware = new Middleware($this->repositoryService->getAuthTokenRepository());
+        $middleware = new Middleware();
         $this->currentUser = $middleware->getCurrentUser();
     }
 

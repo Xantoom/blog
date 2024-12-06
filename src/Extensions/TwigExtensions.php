@@ -3,7 +3,6 @@
 namespace App\Extensions;
 
 use App\Entity\User;
-use App\enums\Roles;
 use App\Security\Middleware;
 use App\Service\RepositoryService;
 use Twig\Extension\AbstractExtension;
@@ -28,6 +27,7 @@ class TwigExtensions extends AbstractExtension {
 	private function getCurrentUser(): ?User
 	{
 		$repositoryService = new RepositoryService();
+		$entityManager = $repositoryService->getEntityManager();
 		return (new Middleware($repositoryService->getAuthTokenRepository()))->getCurrentUser();
 	}
 
@@ -42,8 +42,7 @@ class TwigExtensions extends AbstractExtension {
 
     private function isGranted(string $role): bool
     {
-        $repositoryService = new RepositoryService();
-        $middleware = new Middleware($repositoryService->getAuthTokenRepository());
+        $middleware = new Middleware();
 
         $currentUser = $middleware->getCurrentUser();
         if (null === $currentUser) {
