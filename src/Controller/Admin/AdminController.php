@@ -6,6 +6,8 @@ use App\Controller\AbstractController;
 
 abstract class AdminController extends AbstractController
 {
+	protected const ITEMS_PER_PAGE = 10;
+
 	public function __construct()
 	{
 		parent::__construct();

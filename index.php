@@ -3,6 +3,7 @@
 require_once './vendor/autoload.php';
 require_once './config.php';
 
+use App\Controller\Admin\AdminPostController;
 use App\Controller\Admin\DashboardController;
 use App\Controller\Exceptions\NotFoundController;
 use App\Controller\HomeController;
@@ -28,10 +29,10 @@ $routes = [
 	'/comment/(\d+)/edit' => [PostController::class, 'editComment'],
 
     '/admin' => [DashboardController::class, 'index'],
+
     '/admin/posts' => [AdminPostController::class, 'index'],
     '/admin/posts/create' => [AdminPostController::class, 'create'],
     '/admin/posts/(\d+)/edit' => [AdminPostController::class, 'edit'],
-    '/admin/posts/(\d+)/delete' => [AdminPostController::class, 'delete'],
 ];
 
 session_start();

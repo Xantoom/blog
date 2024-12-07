@@ -94,4 +94,21 @@ abstract class AbstractController
         // if there is no flash message of this type, create a new array
         $_SESSION['flashes'][$type] = [$message];
     }
+
+	protected function getRequestGet(string $key): string
+	{
+		if (!isset($_GET[$key])) {
+			return '';
+		}
+
+		return htmlspecialchars($_GET[$key]);
+	}
+
+	protected function getRequestPost(string $key): string
+	{
+		if (!isset($_POST[$key])) {
+			return '';
+		}
+		return htmlspecialchars($_POST[$key]);
+	}
 }
