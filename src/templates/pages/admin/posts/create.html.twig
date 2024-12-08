@@ -1,0 +1,59 @@
+{% extends 'layout/admin/_base_admin.html.twig' %}
+
+{% block title %}Create new post{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Create New Post</h1>
+        <a href="/admin/posts" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Posts
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form action="/admin/posts/create" method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Enter post title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="preview" class="form-label">Preview</label>
+                    <textarea class="form-control" id="preview" name="preview" rows="3" placeholder="Enter a short preview of the post" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea class="form-control" id="content" name="content" rows="6" placeholder="Write the post content here" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="banner" class="form-label">Banner URL</label>
+                    <input type="url" class="form-control" id="banner" name="banner" placeholder="Enter banner image URL">
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" name="category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="published" name="published" value="true">
+                    <label class="form-check-label" for="published">Publish </label>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Create Post
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

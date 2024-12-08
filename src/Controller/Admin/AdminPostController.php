@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Post;
+use App\Entity\PostEdit;
 use App\Entity\PostPublish;
 
 class AdminPostController extends AdminController
@@ -85,7 +86,9 @@ class AdminPostController extends AdminController
 			$this->redirect('/admin/posts');
 		}
 
-		return $this->render('pages/admin/posts/create.html.twig');
+		return $this->render('pages/admin/posts/create.html.twig', [
+			'categories' => $this->getRepositoryService()->getPostCategoryRepository()->findBy([], ['name' => 'ASC']),
+		]);
 	}
 
 	public function edit(string $id): string
@@ -118,28 +121,33 @@ class AdminPostController extends AdminController
 				$this->redirect('/admin/posts/' . $post->getId() . '/edit');
 			}
 
-			$post
+			$postEdit = new PostEdit();
+			$postEdit
 				->setBanner($banner)
 				->setCategory($category)
 				->setContent($content)
+				->setEditedBy($this->getCurrentUser())
+				->setEditedAt(new \DateTimeImmutable())
 				->setPreview($preview)
+				->setPost($post)
 				->setTitle($title)
 			;
 
-			$postPublish = $post->getPublish();
-			if ('true' === $published) {
-				if (null === $postPublish) {
-					$postPublish = new PostPublish();
-					$postPublish
-						->setPublished(true)
-						->setPublishedAt(new \DateTimeImmutable())
-						->setPublishedBy($this->getCurrentUser());
-					$post->addPublish($postPublish);
-				}
-			} else {
-				if (null !== $postPublish) {
-					$post->removePublish($postPublish);
-				}
+			$this->getEntityManager()->persist($postEdit);
+			$this->getEntityManager()->flush();
+
+			$postPublish = $post->getPublishes()->first();
+			$publish = (bool) $published;
+
+			if ((null === $postPublish) || (null !== $postPublish && $publish !== $postPublish->getPublished())) {
+				$newPostPublish = new PostPublish();
+				$newPostPublish
+					->setPost($post)
+					->setPublished($publish)
+					->setPublishedAt(new \DateTimeImmutable())
+					->setPublishedBy($this->getCurrentUser())
+				;
+				$post->addPublish($newPostPublish);
 			}
 
 			$this->getEntityManager()->persist($post);
@@ -151,6 +159,7 @@ class AdminPostController extends AdminController
 
 		return $this->render('pages/admin/posts/edit.html.twig', [
 			'post' => $post,
+			'categories' => $this->getRepositoryService()->getPostCategoryRepository()->findBy([], ['name' => 'ASC']),
 		]);
 	}
 }

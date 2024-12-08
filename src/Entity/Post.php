@@ -49,7 +49,7 @@ class Post
     #[ORM\OrderBy(['editedAt' => 'DESC'])]
     private Collection $edits;
 
-    #[ORM\OneToMany(targetEntity: PostPublish::class, mappedBy: 'post')]
+    #[ORM\OneToMany(targetEntity: PostPublish::class, mappedBy: 'post', cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['publishedAt' => 'DESC'])]
     private Collection $publishes;
 
