@@ -33,6 +33,7 @@ $routes = [
     '/admin/posts' => [AdminPostController::class, 'index'],
     '/admin/posts/create' => [AdminPostController::class, 'create'],
     '/admin/posts/(\d+)/edit' => [AdminPostController::class, 'edit'],
+	'/admin/posts/(\d+)/edits' => [AdminPostController::class, 'listingEdits'],
 ];
 
 session_start();

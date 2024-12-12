@@ -30,6 +30,31 @@ class AdminPostController extends AdminController
 		]);
 	}
 
+	public function listingEdits(string $id): string
+	{
+		$currentPage = $this->getRequestGet('page') ? (int) $this->getRequestGet('page') : 1;
+
+		$post = $this->getRepositoryService()->getPostRepository()->find($id);
+
+		if (!($post instanceof Post)) {
+			$this->addFlash('error', 'Post not found');
+			$this->redirect('/admin/posts');
+		}
+
+		$edits = $this->getRepositoryService()->getPostEditRepository()->findBy(
+			['post' => $post],
+			['editedAt' => 'DESC'],
+			self::ITEMS_PER_PAGE,
+			($currentPage - 1) * self::ITEMS_PER_PAGE
+		);
+
+		return $this->render('pages/admin/posts/listing_edits.html.twig', [
+			'post' => $post,
+			'edits' => $edits,
+			'currentPage' => $currentPage,
+		]);
+	}
+
 	public function create(): string
 	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
