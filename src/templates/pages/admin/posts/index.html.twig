@@ -34,14 +34,16 @@
                     <td>{{ post.preview }}</td>
                     <td>{{ post.category.name }}</td>
                     <td>{{ post.createdAt|date('d/m/Y H:i') }}</td>
-                    <td class="text-center d-flex justify-content-center align-items-center gap-1">
-						<a href="/admin/posts/{{ post.id }}/edits" class="btn btn-sm btn-outline-success" title="View
-						edits">
-							<i class="bi bi-eye"></i>
-						</a>
-                        <a href="/admin/posts/{{ post.id }}/edit" class="btn btn-sm btn-outline-success" title="Edit">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
+                    <td class="text-center">
+						<div class="d-inline-flex gap-1">
+							<a href="/admin/posts/{{ post.id }}/edits" class="btn btn-sm btn-outline-success"
+							   title="View edits">
+								<i class="bi bi-eye"></i>
+							</a>
+							<a href="/admin/posts/{{ post.id }}/edit" class="btn btn-sm btn-outline-success" title="Edit">
+								<i class="bi bi-pencil-square"></i>
+							</a>
+						</div>
                     </td>
                 </tr>
             {% else %}
@@ -53,27 +55,9 @@
         </table>
     </div>
 
-    <div class="d-flex justify-content-end align-items-center mt-4">
-        <ul class="pagination">
-            {% if currentPage > 1 %}
-                <li class="page-item">
-                    <a class="page-link" href="/admin/posts?page={{ currentPage - 1 }}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span> Previous
-                    </a>
-                </li>
-            {% endif %}
-
-            <li class="page-item active">
-                <span class="page-link">{{ currentPage }}</span>
-            </li>
-
-            {% if currentPage < nbPages %}
-                <li class="page-item">
-                    <a class="page-link" href="/admin/posts?page={{ currentPage + 1 }}" aria-label="Next">
-                        Next <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
+	{{ include('pages/admin/components/_pagination.html.twig', {
+		'currentPage': currentPage,
+		'nbPages': nbPages,
+		'entity': 'posts'
+	}) }}
 {% endblock %}

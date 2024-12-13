@@ -46,7 +46,7 @@ class PostController extends AbstractController
 		$post = $this->getRepositoryService()->getPostRepository()->find($id);
 
 		if (!($post instanceof Post)) {
-			$this->addFlash('error', 'Post not found');
+			$this->addFlash('danger', 'Post not found');
 			$this->redirect('/not-found');
 		}
 
@@ -57,14 +57,14 @@ class PostController extends AbstractController
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 			if (!isset($_POST['content']) && !isset($_POST['edit_comment_id'], $_POST['edit_comment_content'])) {
-				$this->addFlash('error', 'Your REQUEST is invalid');
+				$this->addFlash('danger', 'Your REQUEST is invalid');
 				$this->redirect('/posts/' . $post->getId());
 			}
 
 			if (isset($_POST['content'])) {
 				$content = $_POST['content'];
 				if (empty($content)) {
-					$this->addFlash('error', 'All fields are required');
+					$this->addFlash('danger', 'All fields are required');
 					$this->redirect('/posts/' . $post->getId() . '#comment-section');
 				}
 
@@ -102,13 +102,13 @@ class PostController extends AbstractController
 				$comment = $this->getRepositoryService()->getCommentRepository()->find($commentId);
 
 				if (!($comment instanceof Comment)) {
-					$this->addFlash('error', 'Comment not found');
+					$this->addFlash('danger', 'Comment not found');
 					$this->redirect('/not-found');
 				}
 
 				$editCommentContent = $_POST['edit_comment_content'];
 				if (empty($editCommentContent)) {
-					$this->addFlash('error', 'All fields are required');
+					$this->addFlash('danger', 'All fields are required');
 					$this->redirect('/posts/' . $post->getId() . '#comment-section');
 				}
 
@@ -151,7 +151,7 @@ class PostController extends AbstractController
 		$comment = $this->getRepositoryService()->getCommentRepository()->find($id);
 
 		if (!($comment instanceof Comment)) {
-			$this->addFlash('error', 'Comment not found');
+			$this->addFlash('danger', 'Comment not found');
 			$this->redirect('/not-found');
 		}
 
@@ -192,7 +192,7 @@ class PostController extends AbstractController
 			$this->redirect('/posts/' . $comment->getPost()->getId(). '#comment-section');
 		}
 
-		$this->addFlash('error', 'You are not allowed to do this');
+		$this->addFlash('danger', 'You are not allowed to do this');
 		$this->redirect('/posts/' . $comment->getPost()->getId(). '#comment-section');
 	}
 
@@ -205,7 +205,7 @@ class PostController extends AbstractController
 		$comment = $this->getRepositoryService()->getCommentRepository()->find($id);
 
 		if (!($comment instanceof Comment)) {
-			$this->addFlash('error', 'Comment not found');
+			$this->addFlash('danger', 'Comment not found');
 			$this->redirect('/not-found');
 		}
 
@@ -232,7 +232,7 @@ class PostController extends AbstractController
 			$this->redirect('/posts/' . $comment->getPost()->getId(). '#comment-section');
 		}
 
-		$this->addFlash('error', 'You are not allowed to do this');
+		$this->addFlash('danger', 'You are not allowed to do this');
 		$this->redirect('/posts/' . $comment->getPost()->getId(). '#comment-section');
 	}
 
@@ -245,7 +245,7 @@ class PostController extends AbstractController
 		$comment = $this->getRepositoryService()->getCommentRepository()->find($id);
 
 		if (!($comment instanceof Comment)) {
-			$this->addFlash('error', 'Comment not found');
+			$this->addFlash('danger', 'Comment not found');
 			$this->redirect('/not-found');
 		}
 
@@ -276,7 +276,7 @@ class PostController extends AbstractController
 			$this->redirect('/posts/' . $comment->getPost()->getId(). '#comment-section');
 		}
 
-		$this->addFlash('error', 'You are not allowed to do this');
+		$this->addFlash('danger', 'You are not allowed to do this');
 		$this->redirect('/posts/' . $comment->getPost()->getId(). '#comment-section');
 	}
 
@@ -285,7 +285,7 @@ class PostController extends AbstractController
 		$comment = $this->getRepositoryService()->getCommentRepository()->find($id);
 
 		if (!($comment instanceof Comment)) {
-			$this->addFlash('error', 'Comment not found');
+			$this->addFlash('danger', 'Comment not found');
 			$this->redirect('/not-found');
 		}
 

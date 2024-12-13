@@ -3,7 +3,9 @@
 require_once './vendor/autoload.php';
 require_once './config.php';
 
+use App\Controller\Admin\AdminPostCategoryController;
 use App\Controller\Admin\AdminPostController;
+use App\Controller\Admin\AdminUserController;
 use App\Controller\Admin\DashboardController;
 use App\Controller\Exceptions\NotFoundController;
 use App\Controller\HomeController;
@@ -34,6 +36,13 @@ $routes = [
     '/admin/posts/create' => [AdminPostController::class, 'create'],
     '/admin/posts/(\d+)/edit' => [AdminPostController::class, 'edit'],
 	'/admin/posts/(\d+)/edits' => [AdminPostController::class, 'listingEdits'],
+
+	'/admin/categories' => [AdminPostCategoryController::class, 'index'],
+	'/admin/categories/create' => [AdminPostCategoryController::class, 'create'],
+	'/admin/categories/(\d+)/edit' => [AdminPostCategoryController::class, 'edit'],
+
+	'/admin/users' => [AdminUserController::class, 'index'],
+	'/admin/users/(\d+)/edit' => [AdminUserController::class, 'edit'],
 ];
 
 session_start();

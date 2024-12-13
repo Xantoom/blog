@@ -62,6 +62,7 @@ class User
     private Collection $commentsEdited;
 
     #[ORM\OneToMany(targetEntity: AuthToken::class, mappedBy: 'user')]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
     private Collection $authTokens;
 
     public function __construct()

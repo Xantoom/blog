@@ -37,7 +37,7 @@ class AdminPostController extends AdminController
 		$post = $this->getRepositoryService()->getPostRepository()->find($id);
 
 		if (!($post instanceof Post)) {
-			$this->addFlash('error', 'Post not found');
+			$this->addFlash('danger', 'Post not found');
 			$this->redirect('/admin/posts');
 		}
 
@@ -48,9 +48,12 @@ class AdminPostController extends AdminController
 			($currentPage - 1) * self::ITEMS_PER_PAGE
 		);
 
+		$nbEdits = $this->getRepositoryService()->getPostEditRepository()->count(['post' => $post]);
+
 		return $this->render('pages/admin/posts/listing_edits.html.twig', [
 			'post' => $post,
 			'edits' => $edits,
+			'nbPages' => ceil($nbEdits / self::ITEMS_PER_PAGE),
 			'currentPage' => $currentPage,
 		]);
 	}
@@ -61,7 +64,7 @@ class AdminPostController extends AdminController
 			$fields = ['title', 'content', 'preview', 'banner', 'category', 'published'];
 			foreach ($fields as $field) {
 				if ($this->getRequestPost($field) === null) {
-					$this->addFlash('error', 'Your REQUEST is invalid. Please fill all the fields');
+					$this->addFlash('danger', 'Your REQUEST is invalid. Please fill all the fields');
 					$this->redirect('/admin/posts/create');
 				}
 			}
@@ -74,7 +77,7 @@ class AdminPostController extends AdminController
 			$published = $this->getRequestPost('published');
 
 			if (null === $category) {
-				$this->addFlash('error', 'Category not found');
+				$this->addFlash('danger', 'Category not found');
 				$this->redirect('/admin/posts/create');
 			}
 
@@ -121,7 +124,7 @@ class AdminPostController extends AdminController
 		$post = $this->getRepositoryService()->getPostRepository()->find($id);
 
 		if (!($post instanceof Post)) {
-			$this->addFlash('error', 'Post not found');
+			$this->addFlash('danger', 'Post not found');
 			$this->redirect('/admin/posts');
 		}
 
@@ -129,7 +132,7 @@ class AdminPostController extends AdminController
 			$fields = ['title', 'content', 'preview', 'banner', 'category', 'published'];
 			foreach ($fields as $field) {
 				if ($this->getRequestPost($field) === null) {
-					$this->addFlash('error', 'Your REQUEST is invalid. Please fill all the fields');
+					$this->addFlash('danger', 'Your REQUEST is invalid. Please fill all the fields');
 					$this->redirect('/admin/posts/' . $post->getId() . '/edit');
 				}
 			}
@@ -142,7 +145,7 @@ class AdminPostController extends AdminController
 			$published = $this->getRequestPost('published');
 
 			if (null === $category) {
-				$this->addFlash('error', 'Category not found');
+				$this->addFlash('danger', 'Category not found');
 				$this->redirect('/admin/posts/' . $post->getId() . '/edit');
 			}
 

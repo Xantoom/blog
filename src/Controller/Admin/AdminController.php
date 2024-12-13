@@ -13,12 +13,12 @@ abstract class AdminController extends AbstractController
 		parent::__construct();
 
 		if (!$this->isLogged()) {
-			$this->addFlash('error', 'You need to be logged in to access this page');
+			$this->addFlash('danger', 'You need to be logged in to access this page');
 			$this->redirect('/login');
 		}
 
-		if (!$this->isGranted('ROLE_ADMIN')) {
-			$this->addFlash('error', 'You need to be an admin to access this page');
+		if (!$this->isGranted('ROLE_ADMIN') || !$this->isGranted('ROLE_EDITOR')) {
+			$this->addFlash('danger', 'You need to be an admin to access this page');
 			$this->redirect('/');
 		}
 	}
