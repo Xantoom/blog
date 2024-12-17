@@ -3,6 +3,10 @@
 require_once './vendor/autoload.php';
 require_once './config.php';
 
+use App\Controller\Admin\AdminPostCategoryController;
+use App\Controller\Admin\AdminPostController;
+use App\Controller\Admin\AdminUserController;
+use App\Controller\Admin\DashboardController;
 use App\Controller\Exceptions\NotFoundController;
 use App\Controller\HomeController;
 use App\Controller\PostController;
@@ -26,13 +30,19 @@ $routes = [
 	'/comment/(\d+)/delete' => [PostController::class, 'deleteComment'],
 	'/comment/(\d+)/edit' => [PostController::class, 'editComment'],
 
-	'/account' => [AccountController::class, 'index'],
+    '/admin' => [DashboardController::class, 'index'],
 
-    '/admin' => [AdminController::class, 'index'],
     '/admin/posts' => [AdminPostController::class, 'index'],
     '/admin/posts/create' => [AdminPostController::class, 'create'],
     '/admin/posts/(\d+)/edit' => [AdminPostController::class, 'edit'],
-    '/admin/posts/(\d+)/delete' => [AdminPostController::class, 'delete'],
+	'/admin/posts/(\d+)/edits' => [AdminPostController::class, 'listingEdits'],
+
+	'/admin/categories' => [AdminPostCategoryController::class, 'index'],
+	'/admin/categories/create' => [AdminPostCategoryController::class, 'create'],
+	'/admin/categories/(\d+)/edit' => [AdminPostCategoryController::class, 'edit'],
+
+	'/admin/users' => [AdminUserController::class, 'index'],
+	'/admin/users/(\d+)/edit' => [AdminUserController::class, 'edit'],
 ];
 
 session_start();
@@ -46,10 +56,8 @@ foreach ($routes as $pattern => $callback) {
         // Appeler le contrôleur et la méthode avec les paramètres capturés
         $controller = new $callback[0]();
         echo call_user_func_array([$controller, $callback[1]], $matches);
-        exit(); // Important pour arrêter l'exécution après avoir trouvé une route
     }
 }
 
 // Aucune route trouvée
 header('Location: /not-found'.PHP_EOL);
-exit();

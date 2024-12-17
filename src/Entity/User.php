@@ -62,6 +62,7 @@ class User
     private Collection $commentsEdited;
 
     #[ORM\OneToMany(targetEntity: AuthToken::class, mappedBy: 'user')]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
     private Collection $authTokens;
 
     public function __construct()
@@ -140,7 +141,11 @@ class User
 
     public function getRoles(): ?array
     {
-        return $this->roles;
+		$roles = $this->roles;
+		if (!in_array(Roles::ROLE_USER->value, $roles, true)) {
+			$roles[] = Roles::ROLE_USER->value;
+		}
+        return $roles;
     }
 
     public function setRoles(array $roles): self

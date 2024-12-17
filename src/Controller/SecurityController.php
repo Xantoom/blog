@@ -21,13 +21,13 @@ class SecurityController extends AbstractController
     public function register(): string
     {
         if ($this->isLogged()) {
-            $this->addFlash('error', 'You are already connected');
+            $this->addFlash('danger', 'You are already connected');
             $this->redirect('/');
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['password'], $_POST['password_confirmation'])) {
-                $this->addFlash('error', 'All fields are required');
+                $this->addFlash('danger', 'All fields are required');
                 return $this->render('pages/security/register/register.html.twig');
             }
 
@@ -38,24 +38,24 @@ class SecurityController extends AbstractController
             $passwordConfirmation = $_POST['password_confirmation'];
 
             if (empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($passwordConfirmation)) {
-                $this->addFlash('error', 'All fields are required');
+                $this->addFlash('danger', 'All fields are required');
                 return $this->render('pages/security/register/register.html.twig');
             }
 
             if ($password !== $passwordConfirmation) {
-                $this->addFlash('error', 'Passwords do not match');
+                $this->addFlash('danger', 'Passwords do not match');
                 return $this->render('pages/security/register/register.html.twig');
             }
 
             if (strlen($password) <= 8) {
-                $this->addFlash('error', 'Password must be at least 8 characters long');
+                $this->addFlash('danger', 'Password must be at least 8 characters long');
                 return $this->render('pages/security/register/register.html.twig');
             }
 
             $userRepository = $this->getRepositoryService()->getUserRepository();
             $user = $userRepository->findOneBy(['email' => $email]);
             if ($user instanceof User) {
-                $this->addFlash('error', 'User already exists');
+                $this->addFlash('danger', 'User already exists');
                 return $this->render('pages/security/register/register.html.twig');
             }
 
@@ -80,8 +80,6 @@ class SecurityController extends AbstractController
             $this->getEntityManager()->persist($authToken);
             $this->getEntityManager()->flush();
 
-            // ENVOYER UN EMAIL
-
             $_SESSION['auth_token'] = $authToken->getToken();
 
             $this->addFlash('success', 'You are now registered');
@@ -99,35 +97,40 @@ class SecurityController extends AbstractController
     public function login(): string
     {
         if ($this->isLogged()) {
-            $this->addFlash('error', 'You are already connected');
+            $this->addFlash('danger', 'You are already connected');
             $this->redirect('/');
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($_POST['email'], $_POST['password'])) {
-                $this->addFlash('error', 'All fields are required');
-                return $this->render('pages/security/login/login.html.twig');
+                $this->addFlash('danger', 'All fields are required');
+	            $this->redirect('/login');
             }
 
             $email = $_POST['email'];
             $password = $_POST['password'];
 
             if (empty($email) || empty($password)) {
-                $this->addFlash('error', 'All fields are required');
-                return $this->render('pages/security/login/login.html.twig');
+                $this->addFlash('danger', 'All fields are required');
+	            $this->redirect('/login');
             }
 
             $userRepository = $this->getRepositoryService()->getUserRepository();
             $user = $userRepository->findOneBy(['email' => $email]);
             if (!($user instanceof User)) {
-                $this->addFlash('error', 'User not found, please verify your email');
-                return $this->render('pages/security/login/login.html.twig');
+                $this->addFlash('danger', 'User not found, please verify your email');
+                $this->redirect('/login');
             }
 
             if (!password_verify($password, $user->getPassword())) {
-                $this->addFlash('error', 'Invalid password');
-                return $this->render('pages/security/login/login.html.twig');
+                $this->addFlash('danger', 'Invalid password');
+	            $this->redirect('/login');
             }
+			
+			if (!$user->getActive()) {
+				$this->addFlash('danger', 'Your account has been disabled');
+				$this->redirect('/login');
+			}
 
             $authToken = new AuthToken();
             $authToken
@@ -153,7 +156,7 @@ class SecurityController extends AbstractController
     public function logout(): void
     {
         if (!$this->isLogged()) {
-            $this->addFlash('error', 'You are not connected');
+            $this->addFlash('danger', 'You are not connected');
             $this->redirect('/');
         }
 

@@ -102,6 +102,20 @@ class AppFixtures implements FixtureInterface
         $this->persistentUsers[] = $user;
 
 		$this->manager->flush();
+		
+		// ME (ADMIN)
+	    $xlauer = new User();
+		$xlauer
+			->setEmail('xantoom@gmail.com')
+			->setPassword('password')
+			->setFirstname('Xavier')
+			->setLastname('Lauer')
+			->setRoles([Roles::ROLE_ADMIN, Roles::ROLE_EDITOR, Roles::ROLE_USER])
+		;
+		$this->manager->persist($xlauer);
+		$this->persistentUsers[] = $xlauer;
+		
+		$this->manager->flush();
     }
 
 	private function createPosts(): void

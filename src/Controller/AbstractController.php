@@ -38,7 +38,7 @@ abstract class AbstractController
 
         $this->repositoryService = new RepositoryService();
 
-        $middleware = new Middleware($this->repositoryService->getAuthTokenRepository());
+        $middleware = new Middleware();
         $this->currentUser = $middleware->getCurrentUser();
     }
 
@@ -79,7 +79,6 @@ abstract class AbstractController
     protected function redirect(string $route): void
     {
         header("Location: $route".PHP_EOL);
-        exit();
     }
 
     protected function addFlash(string $type, string $message): void
@@ -94,4 +93,21 @@ abstract class AbstractController
         // if there is no flash message of this type, create a new array
         $_SESSION['flashes'][$type] = [$message];
     }
+
+	protected function getRequestGet(string $key): string
+	{
+		if (!isset($_GET[$key])) {
+			return '';
+		}
+
+		return htmlspecialchars($_GET[$key]);
+	}
+
+	protected function getRequestPost(string $key): string
+	{
+		if (!isset($_POST[$key])) {
+			return '';
+		}
+		return htmlspecialchars($_POST[$key]);
+	}
 }

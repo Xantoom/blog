@@ -44,7 +44,7 @@ class HomeController extends AbstractController
                 ->setFromName('Xavier Lauer')
                 ->setRecipients([new Recipient($email, $name)])
                 ->setSubject('Contact form')
-                ->setHtml('HTML content')
+                ->setHtml($message)
             ;
 
             (new MailerSend(['api_key' => $_ENV['MAILERSEND_API_KEY']]))->email->send($emailParams);

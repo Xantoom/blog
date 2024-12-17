@@ -1,0 +1,65 @@
+{% extends 'layout/admin/_base_admin.html.twig' %}
+
+{% block title %}Listing Post Edits{% endblock %}
+
+{% block body %}
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h1 class="h3">Post Edits Listing</h1>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table table-bordered table-striped table-hover">
+			<thead class="table-light">
+			<tr>
+				<th>#</th>
+				<th>Title</th>
+				<th>Preview</th>
+				<th>Edited at</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for edit in edits %}
+				<tr>
+					<td>{{ edit.id }}</td>
+					<td>
+						<a href="/posts/{{ post.id }}" class="text-decoration-none">
+							{{ edit.title }}
+						</a>
+					</td>
+					<td>{{ edit.preview }}</td>
+					<td>{{ edit.editedAt|date('d/m/Y H:i') }}</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6" class="text-center">No post edits found.</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="d-flex justify-content-end align-items-center mt-4">
+		<ul class="pagination">
+			{% if currentPage > 1 %}
+				<li class="page-item">
+					<a class="page-link" href="/admin/posts/{{ post.id }}/edits?page={{ currentPage - 1 }}"
+					   aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span> Previous
+					</a>
+				</li>
+			{% endif %}
+
+			<li class="page-item active">
+				<span class="page-link">{{ currentPage }}</span>
+			</li>
+
+			{% if currentPage < nbPages %}
+				<li class="page-item">
+					<a class="page-link" href="/admin/posts/{{ post.id }}/edits?page={{ currentPage + 1 }}" aria-label="Next">
+						Next <span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+{% endblock %}

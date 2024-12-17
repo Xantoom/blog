@@ -103,6 +103,13 @@ class PostEdit
         return $this;
     }
 
+	public function setEditedAt(\DateTimeImmutable $editedAt): static
+	{
+		$this->editedAt = $editedAt;
+
+		return $this;
+	}
+
     public function getEditedAt(): ?\DateTimeImmutable
     {
         return $this->editedAt;
