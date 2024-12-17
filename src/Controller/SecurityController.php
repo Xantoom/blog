@@ -80,8 +80,6 @@ class SecurityController extends AbstractController
             $this->getEntityManager()->persist($authToken);
             $this->getEntityManager()->flush();
 
-            // ENVOYER UN EMAIL
-
             $_SESSION['auth_token'] = $authToken->getToken();
 
             $this->addFlash('success', 'You are now registered');
@@ -106,7 +104,7 @@ class SecurityController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($_POST['email'], $_POST['password'])) {
                 $this->addFlash('danger', 'All fields are required');
-                return $this->render('pages/security/login/login.html.twig');
+	            $this->redirect('/login');
             }
 
             $email = $_POST['email'];
@@ -114,20 +112,25 @@ class SecurityController extends AbstractController
 
             if (empty($email) || empty($password)) {
                 $this->addFlash('danger', 'All fields are required');
-                return $this->render('pages/security/login/login.html.twig');
+	            $this->redirect('/login');
             }
 
             $userRepository = $this->getRepositoryService()->getUserRepository();
             $user = $userRepository->findOneBy(['email' => $email]);
             if (!($user instanceof User)) {
                 $this->addFlash('danger', 'User not found, please verify your email');
-                return $this->render('pages/security/login/login.html.twig');
+                $this->redirect('/login');
             }
 
             if (!password_verify($password, $user->getPassword())) {
                 $this->addFlash('danger', 'Invalid password');
-                return $this->render('pages/security/login/login.html.twig');
+	            $this->redirect('/login');
             }
+			
+			if (!$user->getActive()) {
+				$this->addFlash('danger', 'Your account has been disabled');
+				$this->redirect('/login');
+			}
 
             $authToken = new AuthToken();
             $authToken

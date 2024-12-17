@@ -2,9 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use AllowDynamicProperties;
 use App\Entity\User;
+use MailerSend\Helpers\Builder\EmailParams;
+use MailerSend\Helpers\Builder\Recipient;
+use MailerSend\MailerSend;
 
-class AdminUserController extends AdminController
+#[AllowDynamicProperties] class AdminUserController extends AdminController
 {
 
 	public function index(): string
@@ -43,7 +47,7 @@ class AdminUserController extends AdminController
 		}
 
 		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$fields = ['firstname', 'lastname', 'email', 'roles', 'active'];
+			$fields = ['firstname', 'lastname', 'email', 'active'];
 			foreach ($fields as $field) {
 				if ($this->getRequestPost($field) === null) {
 					$this->addFlash('danger', 'Your REQUEST is invalid. Please fill all the fields');
@@ -56,6 +60,23 @@ class AdminUserController extends AdminController
 			$email = $this->getRequestPost('email');
 			$roles = (array) $this->getRequestPost('roles');
 			$active = $this->getRequestPost('active');
+			$password = $this->getRequestPost('password');
+			
+			if (!empty($password)) {
+				// Send email
+				$emailParams = (new EmailParams())
+					->setFrom($_ENV['MAILERSEND_MAIL_ADDRESS'])
+					->setFromName('Xavier Lauer')
+					->setRecipients([new Recipient($email, $firstname . ' ' . $lastname)])
+					->setSubject('Password updated')
+					->setHtml('Your password has been updated by an admin. Your new password is: ' . $password)
+				;
+
+				(new MailerSend(['api_key' => $_ENV['MAILERSEND_API_KEY']]))->email->send($emailParams);
+				
+				$user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+				$this->addFlash('info', 'Password has been updated. User will receive an email');
+			}
 
 			$user
 				->setFirstname($firstname)
@@ -67,12 +88,17 @@ class AdminUserController extends AdminController
 
 			$this->getEntityManager()->persist($user);
 			$this->getEntityManager()->flush();
+			
+			if ($this->getCurrentUser()?->getId() === $user->getId()) {
+				$this->addFlash('success', 'Your account has been updated. Please log in again');
+				$this->redirect('/logout');
+			}
 
 			$this->addFlash('success', 'User updated successfully');
 			$this->redirect('/admin/users');
 		}
 
-		return $this->render('pages/admin/posts/edit.html.twig', [
+		return $this->render('pages/admin/users/edit.html.twig', [
 			'user' => $user,
 		]);
 	}

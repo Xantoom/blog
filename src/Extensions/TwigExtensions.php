@@ -3,8 +3,8 @@
 namespace App\Extensions;
 
 use App\Entity\User;
+use App\enums\Roles;
 use App\Security\Middleware;
-use App\Service\RepositoryService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -16,19 +16,12 @@ class TwigExtensions extends AbstractExtension {
             new TwigFunction('assets', $this->getAssets(...)),
             new TwigFunction('flashes', $this->getFlashes(...)),
             new TwigFunction('currentUser', $this->getCurrentUser(...)),
-            new TwigFunction('dump', $this->getDump(...)),
         ];
     }
 
-	private function getDump($var): void {
-		dump($var);
-	}
-
 	private function getCurrentUser(): ?User
 	{
-		$repositoryService = new RepositoryService();
-		$entityManager = $repositoryService->getEntityManager();
-		return (new Middleware($repositoryService->getAuthTokenRepository()))->getCurrentUser();
+		return (new Middleware())->getCurrentUser();
 	}
 
     private function getFlashes(): array {
@@ -48,8 +41,13 @@ class TwigExtensions extends AbstractExtension {
         if (null === $currentUser) {
             return false;
         }
-
-        return in_array($role, $currentUser->getRoles(), true);
+		
+		$roles = $currentUser->getRoles();
+		if (in_array(Roles::ROLE_ADMIN->value, $roles, true)) {
+			return true;
+		}
+		
+        return in_array($role, $roles, true);
     }
 
 	private function getPath(string $route, ?array $params = []): string
