@@ -19,6 +19,7 @@
 - Se placer dans le dossier du projet
 - Faire la commande : ```make up```
 - Ouvrir un navigateur et aller à l'adresse : [http://localhost](http://localhost)
+- Les identifiants de tests sont dans le fichier src/Fixtures/AppFixtures.php une fois les fixtures lancées
 
 ### Fixtures ###
 Pour ajouter des données de test, faire la commande : ```make load-fixtures```
