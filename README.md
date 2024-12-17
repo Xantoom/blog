@@ -2,7 +2,7 @@
 
 > Blog est un projet de formation de la formation Développeur PHP Symfony d'OpenClassrooms. Il s'agit d'un blog personel.
 
-Étape du projet : 80%
+Étape du projet : 100%
 
 ## Prérequis ##
 
