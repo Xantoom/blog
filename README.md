@@ -24,6 +24,9 @@
 ### Fixtures ###
 Pour ajouter des données de test, faire la commande : ```make load-fixtures```
 
+### Email ###
+Les emails envoyés seront surement dans vos spams ayant utiliser un service de mail gratuit
+
 ## Arrêt ##
 Pour stopper le projet, faire la commande : ```make down```
 
