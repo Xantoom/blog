@@ -27,9 +27,13 @@
                 <tr>
                     <td>{{ post.id }}</td>
                     <td>
-						<a href="/posts/{{ post.id }}" class="text-decoration-none">
+						{% if post.publishes.first is not null and post.publishes.first.published is same as true %}
+							<a href="/posts/{{ post.id }}" class="text-decoration-none">
+								{{ post.title }}
+							</a>
+						{% else %}
 							{{ post.title }}
-						</a>
+						{% endif %}
 					</td>
                     <td>{{ post.preview }}</td>
                     <td>{{ post.category.name }}</td>

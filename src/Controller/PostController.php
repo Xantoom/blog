@@ -16,19 +16,14 @@ class PostController extends AbstractController
 
     public function index(): string
     {
-		$nbPages = ceil($this->getRepositoryService()->getPostRepository()->count() / self::POSTS_PER_PAGE);
+		$nbPages = ceil($this->countPublishedPosts() / self::POSTS_PER_PAGE);
 		$page = $this->request->query->getInt('page', 1);
 
 		if ($page < 1 || $page > $nbPages) {
 			$this->redirect('/posts');
 		}
 
-		$posts = $this->getRepositoryService()->getPostRepository()->findBy(
-			[],
-			['createdAt' => 'DESC'],
-			self::POSTS_PER_PAGE,
-			($page - 1) * self::POSTS_PER_PAGE
-		);
+	    $posts = $this->findPublishedPosts(self::POSTS_PER_PAGE, ($page - 1) * self::POSTS_PER_PAGE);
 
 		return $this->render('pages/posts/listing/index.html.twig', [
 			'posts' => $posts,
@@ -294,5 +289,45 @@ class PostController extends AbstractController
 
 		// redirect to the post page
 		$this->redirect('/posts/' . $comment->getPost()->getId() . '#comment-section');
+	}
+
+	public function findPublishedPosts(int $limit = null, int $offset = null): array
+	{
+		$qb = $this->getRepositoryService()->getPostRepository()->createQueryBuilder('p')
+			->innerJoin(
+				'p.publishes',
+				'pp',
+				'WITH',
+				'pp.publishedAt = (SELECT MAX(pp2.publishedAt) FROM App\Entity\PostPublish pp2 WHERE pp2.post = p.id)'
+			)
+			->andWhere('pp.published = :published')
+			->setParameter('published', true)
+			->orderBy('pp.publishedAt', 'DESC');
+
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+
+		return $qb->getQuery()->getResult();
+	}
+	
+	private function countPublishedPosts(): int
+	{
+		return $this->getRepositoryService()->getPostRepository()->createQueryBuilder('p')
+			->select('COUNT(p.id)')
+			->innerJoin(
+				'p.publishes',
+				'pp',
+				'WITH',
+				'pp.publishedAt = (SELECT MAX(pp2.publishedAt) FROM App\Entity\PostPublish pp2 WHERE pp2.post = p.id)'
+			)
+			->andWhere('pp.published = :published')
+			->setParameter('published', true)
+			->getQuery()
+			->getSingleScalarResult();
 	}
 }

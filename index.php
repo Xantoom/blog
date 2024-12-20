@@ -56,8 +56,10 @@ foreach ($routes as $pattern => $callback) {
         // Appeler le contrôleur et la méthode avec les paramètres capturés
         $controller = new $callback[0]();
         echo call_user_func_array([$controller, $callback[1]], $matches);
+		exit();
     }
 }
 
 // Aucune route trouvée
 header('Location: /not-found'.PHP_EOL);
+exit();

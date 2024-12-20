@@ -79,6 +79,7 @@ abstract class AbstractController
     protected function redirect(string $route): void
     {
         header("Location: $route".PHP_EOL);
+		exit();
     }
 
     protected function addFlash(string $type, string $message): void

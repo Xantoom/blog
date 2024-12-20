@@ -167,7 +167,7 @@ class AdminPostController extends AdminController
 			$postPublish = $post->getPublishes()->first();
 			$publish = (bool) $published;
 
-			if ((null === $postPublish) || (null !== $postPublish && $publish !== $postPublish->getPublished())) {
+			if ($postPublish === false || (null !== $postPublish && $publish !== $postPublish->getPublished())) {
 				$newPostPublish = new PostPublish();
 				$newPostPublish
 					->setPost($post)
