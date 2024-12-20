@@ -23,7 +23,7 @@ Git est nécessaire pour cloner le projet depuis le dépôt.
 #### Installation sur **Mac** :
 1. Ouvrez un terminal.
 2. Installez Git via Homebrew (si Homebrew n'est pas installé, suivez les instructions sur [https://brew.sh/]
-(https://brew.sh/)) :\
+(https://brew.sh/) :\
    ```brew install git```
 3. Vérifiez l'installation avec :\
    ```git --version```
